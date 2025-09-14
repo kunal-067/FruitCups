@@ -17,7 +17,7 @@ const Footer = () => {
             </nav>
 
             {/* Footer */}
-            <footer id="contact" className="mt-12 bg-slate-900 text-white">
+            <footer id="contact" className="mt-12 hidden md:block bg-slate-900 text-white">
                 <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6">
                     <div>
                         <div className="font-bold text-lg">KotaFruit</div>

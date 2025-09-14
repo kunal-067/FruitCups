@@ -1,20 +1,20 @@
 import { connectDb } from "@/utils/dbconnect";
 import { User } from "@/utils/models/user.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/utils/middleware/auth";
+import { verifyToken } from "../auth/middleware";
 
 // 📌 GET user profile
 async function getProfile(req, user) {
   try {
     await connectDb();
-    const profile = await User.findById(user.id).select("-password");
+    const profile = await User.findById(user.userId).select("-password");
 
     if (!profile) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     return NextResponse.json(
-      { message: "Successfully fetched profile", data: profile },
+      { message: "Successfully fetched profile", profile },
       { status: 200 }
     );
   } catch (error) {

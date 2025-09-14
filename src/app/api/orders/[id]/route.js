@@ -1,7 +1,7 @@
 import { connectDb } from "@/utils/dbconnect";
 import { Order } from "@/utils/models/order.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/utils/middleware/auth";
+import { verifyToken } from "../../auth/middleware";
 
 // 📌 GET single order (only owner or admin)
 async function getOrder(req, user, { params }) {

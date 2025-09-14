@@ -1,7 +1,7 @@
 import { connectDb } from "@/utils/dbconnect";
 import { Product } from "@/utils/models/product.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/utils/middleware/auth";
+import { verifyToken } from "../../auth/middleware";
 
 // 📌 GET product by ID
 export const GET = async (req, { params }) => {

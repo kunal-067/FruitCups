@@ -21,10 +21,13 @@ const productSchema = new mongoose.Schema({
             default: 0
         }
     }],
-    type:{
-        type:String,
-        enum:['fruit','shake','dry-fruit']
+    tag:String,  //slogons like energy booster, emunity booster etc
+    type: {
+        type: String,
+        enum: ['fruit', 'shake', 'dry-fruit']
     }
+}, {
+    timestamps: true
 })
 
 export const Product = mongoose.models?.Product || mongoose.model('Product', productSchema)

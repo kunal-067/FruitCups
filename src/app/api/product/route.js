@@ -9,26 +9,43 @@ import {
 } from "next/server";
 import {
     verifyToken
-} from "@/utils/middlewares/verifyToken";
+} from "../auth/middleware";
 
-// ✅ GET all products
-export const GET = async () => {
-    try {
-        await connectDb();
-        const products = await Product.find();
+export const GET = async (req) => {
+  try {
+    const searchParams = req.nextUrl.searchParams;
+    const search = searchParams.get("search"); // ?search=apple
+    const type = searchParams.get("type");     // ?type=fruit
 
-        return NextResponse.json(products, {
-            status: 200
-        });
-    } catch (error) {
-        return NextResponse.json({
-            message: "Error fetching products",
-            error: error.message,
-        }, {
-            status: 500
-        });
-    }
+    await connectDb();
+
+    // Build query object dynamically
+    let query = {};
+    if (search) query.name = { $regex: search, $options: "i" }; // case-insensitive search
+    if (type) query.type = type;
+
+    const products = await Product.find(query);
+
+    return NextResponse.json(
+      {
+        message: "Products fetched successfully",
+        products,
+        total:products.length,
+        query: { search, type },
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Error fetching products",
+        error: error.message,
+      },
+      { status: 500 }
+    );
+  }
 };
+
 
 // ✅ POST (create new product) → Protected
 async function createProduct(req, user) {

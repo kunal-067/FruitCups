@@ -1,10 +1,11 @@
 'use client'
-import React, { useState } from 'react'
 import { ShoppingCart, User } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
 const NavBar = () => {
-    const [cart, setCart] = useState([]); 
-    
+    const router=useRouter()
+    const cart = useSelector(state=>state.cart)
     return (
         <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-slate-100">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -27,7 +28,7 @@ const NavBar = () => {
 
                 <div className="flex items-center gap-3">
                     <button className="p-2 rounded-md hover:bg-slate-100"><User className="h-5 w-5 text-slate-700" /></button>
-                    <button className="relative p-2 rounded-md hover:bg-slate-100" aria-label="Cart">
+                    <button  onClick={e=>router.push('/cart')} className="relative p-2 rounded-md hover:bg-slate-100" aria-label="Cart">
                         <ShoppingCart className="h-5 w-5" />
                         {cart.length > 0 && (
                             <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-xs w-5 h-5 rounded-full grid place-items-center">{cart.length}</span>

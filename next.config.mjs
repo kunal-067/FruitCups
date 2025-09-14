@@ -12,6 +12,10 @@ const nextConfig = {
         hostname: 'plus.unsplash.com', // sometimes used for premium images
       },
     ],
+    domains: [
+      'upload.wikimedia.org', // allow Wikimedia images
+      'images.unsplash.com',   // allow Unsplash images if needed
+    ],
   },
 }
 
