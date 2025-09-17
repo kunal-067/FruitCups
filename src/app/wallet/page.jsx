@@ -14,7 +14,7 @@ export default function WalletPage() {
   ];
 
   return (
-    <div className="bg-gradient-to-b from-orange-50 to-white min-h-screen">
+    <div className="bg-gradient-to-b from-orange-50 to-white min-h-screen max-sm:pb-16">
       {/* Header */}
       {/* <header className="sticky top-0 z-50 bg-green-600 text-white p-4 flex justify-between items-center shadow-md">
         <h1 className="text-lg font-bold">Wallet & Rewards</h1>

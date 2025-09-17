@@ -23,7 +23,7 @@ import Link from "next/link";
 export default async function ProductDetail({ params }) {
 
   const { id } = await params;
-  const [prodRes, reviewRes] = await Promise.all([fetch(`${process.env.BASE_URL}/api/product/${id}`), fetch(`${process.env.BASE_URL}/api/review/${id}`)]);
+  const [prodRes, reviewRes] = await Promise.all([fetch(`${process.env.BASE_URL}/api/product/${id}?related=fruit`), fetch(`${process.env.BASE_URL}/api/review/${id}`)]);
   if (!prodRes.ok) {
     return (
       <div>
@@ -32,7 +32,7 @@ export default async function ProductDetail({ params }) {
     )
   }
 
-  const { product } = await prodRes.json();
+  const { product, relatedProducts } = await prodRes.json();
   const { reviews } = await reviewRes.json();
 
   const totalStars = (reviews || []).reduce((acc, elem) => acc + (elem?.rating || 0), 0);
@@ -40,12 +40,12 @@ export default async function ProductDetail({ params }) {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden p-4 md:p-8">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden p-4 md:p-8 max-md:pb-24">
         <div className="md:flex">
           {/* Images column */}
           <ImageCaresoul product={product} />
           {/* Details column */}
-          <div className="md:w-1/2 p-6 space-y-4">
+          <div className="md:w-1/2 p-2 sm:p-6 space-y-4">
             <div>
               <h1 className="text-2xl font-semibold">{product.name}</h1>
               <p className="text-sm text-gray-500">by Kota fruits</p>
@@ -181,24 +181,16 @@ export default async function ProductDetail({ params }) {
 
         {/* Related Products */}
         <div className="mt-12">
-          <h3 className="text-lg font-semibold mb-4">You may also like</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {["Papaya Cup", "Watermelon Cup", "Pineapple Cup", "Mixed Fruit Cup"].map((name, idx) => (
-              // <Card key={idx} className="p-3">
-              //   <CardContent className="text-center">
-              //     <div className="w-full h-28 relative mb-2">
-              //       <Image src="/fruit-placeholder.jpg" alt={name} fill className="object-cover rounded-md" />
-              //     </div>
-              //     <div className="font-medium">{name}</div>
-              //     <div className="text-sm text-emerald-600 font-semibold">₹99</div>
-              //     <div className="mt-2">
-              //       <Button size="sm" onClick={() => alert("View product (mock)")}>View</Button>
-              //     </div>
-              //   </CardContent>
-              // </Card>
-              <PopularCups key={idx} />
-            ))}
-          </div>
+          {relatedProducts.length > 0&& (
+            <>
+              <h3 className="text-lg font-semibold mb-4">You may also like</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {relatedProducts.map((item, idx) => (
+                  <PopularCups key={idx} p={item}/>
+                ))}
+              </div>
+            </>)
+          }
         </div>
       </div>
 

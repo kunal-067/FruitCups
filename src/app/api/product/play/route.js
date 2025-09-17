@@ -435,25 +435,25 @@ async function fetchImage(query) {
   return randomPhoto.src;
 }
 
-// export async function GET(res) {
-//   await connectDb();
-//   try {
-//     const products = await Promise.all(
-//       sampleProducts.map(async (elem) => {
-//         const query = `${elem.name} ${elem.type === "shake" ? "drink" : elem.type}`;
-//         const img = await fetchImage(query);
-//         console.log(img.portrait, 'image here ')
-//         return {
-//           ...elem,
-//           images: [{ url: img.large || elem.images[0].url, portrait:img.portrait || '', landScape:img.landscape || '', position: 0 }]
-//         };
-//       })
-//     );
+export async function GET(res) {
+  await connectDb();
+  try {
+    const products = await Promise.all(
+      sampleProducts.map(async (elem) => {
+        const query = `${elem.name} ${elem.type === "shake" ? "drink" : elem.type}`;
+        const img = await fetchImage(query);
+        console.log(img.portrait, 'image here ')
+        return {
+          ...elem,
+          images: [{ url: img.large || elem.images[0].url, portrait:img.portrait || '', landScape:img.landscape || '', position: 0 }]
+        };
+      })
+    );
 
-//     let data = await Product.insertMany(products);
+    let data = await Product.insertMany(products);
 
-//     return NextResponse.json({ message: "Success", data });
-//   } catch (error) {
-//     return NextResponse.json({ msg: error.message, error });
-//   }
-// }
+    return NextResponse.json({ message: "Success", data });
+  } catch (error) {
+    return NextResponse.json({ msg: error.message, error });
+  }
+}

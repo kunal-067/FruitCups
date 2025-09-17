@@ -9,16 +9,12 @@ import {
 } from "next/server";
 import { verifyToken } from "@/app/api/auth/middleware";
 
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export const GET = async (req) => {
   try {
     const searchParams = req.nextUrl.searchParams;
     const search = searchParams.get("search"); // ?search=apple
     const type = searchParams.get("type");     // ?type=fruit
-await wait(2000)
+
     await connectDb();
 
     // Build query object dynamically
