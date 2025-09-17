@@ -1,8 +1,11 @@
 'use client';
 
+import { Spinner } from '@/components/others/Spinner';
 import { LOGIN_API } from '@/lib/ApiRoutes';
+import { setVerified } from '@/redux/slices/authSlice';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';
 
 const { useForm } = require('react-hook-form');
@@ -23,6 +26,7 @@ const loginSchema = z.object({
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -36,6 +40,7 @@ export default function Login() {
     try {
       const response = await axios.post(LOGIN_API, {phone:data.phone, password:data.password})
       console.log(response);
+      dispatch(setVerified());
       toast.success(response.data?.message || 'Login successfull !')
       router.push('/')
     } catch (error) {
@@ -84,7 +89,7 @@ export default function Login() {
             disabled={isSubmitting}
             className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600"
           >
-            {isSubmitting ? '...' : 'Log In'}
+            {isSubmitting ? <Spinner/> : 'Log In'}
           </Button>
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">

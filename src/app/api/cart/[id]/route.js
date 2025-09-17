@@ -1,7 +1,7 @@
 import { connectDb } from "@/utils/dbconnect";
 import { Cart } from "@/utils/models/cart.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "../../auth/middleware";
+import { verifyToken } from "@/app/api/auth/middleware";
 
 // 📌 PUT update quantity
 async function updateCartItem(req, user, { params }) {

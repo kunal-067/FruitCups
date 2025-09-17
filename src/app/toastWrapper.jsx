@@ -1,16 +1,18 @@
 'use client'
-import { Toaster } from '@/components/ui/sonner'
-import { store } from '@/redux/store'
-import React from 'react'
-import { Provider } from 'react-redux'
+import dynamic from 'next/dynamic';
+import React from 'react';
+import { Toaster } from '@/components/ui/sonner';
+import ReduxProviders from './ReduxProvider';
 
-const Wrapper = ({children}) => {
+// const ReduxProviders = dynamic(() => import('./ReduxProvider.jsx'), {
+//   ssr: false, // Disable server-side rendering for this component
+// });
+
+export default function Wrapper({ children }) {
   return (
-    <Provider store={store} >
-        {children}
-        <Toaster />
-    </Provider>
-  )
+    <>
+      <ReduxProviders>{children}</ReduxProviders>
+      <Toaster />
+    </>
+  );
 }
-
-export default Wrapper

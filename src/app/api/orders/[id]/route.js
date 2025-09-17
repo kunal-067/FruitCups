@@ -1,24 +1,27 @@
 import { connectDb } from "@/utils/dbconnect";
 import { Order } from "@/utils/models/order.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "../../auth/middleware";
+import { verifyToken } from "@/app/api/auth/middleware";
+// import { useSearchParams } from "next/navigation";
 
 // 📌 GET single order (only owner or admin)
-async function getOrder(req, user, { params }) {
+async function getOrder(req, user, {params}) {
   try {
+    const {id} = await params;
     await connectDb();
-    const order = await Order.findById(params.id).populate("products.product");
+    const order = await Order.findById(id)
+    // .populate("products.product");
 
     if (!order) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
     }
 
-    if (order.user.toString() !== user.id && !user.isAdmin) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    if (order.user.toString() !== user.userId && user.role!=='admin') {
+      return NextResponse.json({ message: "Unauthorized access" }, { status: 403 });
     }
 
     return NextResponse.json(
-      { message: "Successfully fetched order", data: order },
+      { message: "Successfully fetched order", order },
       { status: 200 }
     );
   } catch (error) {

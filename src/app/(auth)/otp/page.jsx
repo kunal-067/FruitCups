@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
+import { Spinner } from '@/components/others/Spinner';
 
 const { useForm } = require('react-hook-form');
 const { zodResolver } = require('@hookform/resolvers/zod');
@@ -47,7 +48,7 @@ export default function OTP() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors , isSubmitting },
   } = useForm({
     resolver: zodResolver(otpSchema),
     defaultValues: { otp: '' },
@@ -136,9 +137,10 @@ export default function OTP() {
 
           <Button
             type="submit"
+            disabled={isSubmitting}
             className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600"
           >
-            Verify OTP
+            {isSubmitting?<Spinner/> :'Verify OTP'}
           </Button>
         </form>
 

@@ -14,7 +14,9 @@ const nextConfig = {
     ],
     domains: [
       'upload.wikimedia.org', // allow Wikimedia images
-      'images.unsplash.com',   // allow Unsplash images if needed
+      'images.pexels.com',   // <-- add this
+      'images.unsplash.com',  // optional if using Unsplash
+      'cdn.pixabay.com'       // optional if using Pixabay
     ],
   },
 }

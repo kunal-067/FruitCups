@@ -2,12 +2,12 @@ import { connectDb } from "@/utils/dbconnect";
 import { Review } from "@/utils/models/review.model";
 import { Product } from "@/utils/models/product.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "../auth/middleware";
+import { verifyToken } from "@/app/api/auth/middleware";
 
 // 📌 POST new review
 async function createReview(req, user) {
   try {
-    const { productId, rating, comment } = await req.json();
+    const { userName, productId, rating, comment } = await req.json();
     if (!productId || !rating) {
       return NextResponse.json(
         { message: "ProductId and rating are required" },
@@ -25,7 +25,8 @@ async function createReview(req, user) {
 
     const review = new Review({
       product: productId,
-      user: user.id,
+      user: user?.userId,
+      userName: user.name || userName,
       rating,
       comment,
     });

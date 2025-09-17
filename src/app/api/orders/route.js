@@ -1,29 +1,45 @@
-import { connectDb } from "@/utils/dbconnect";
-import { Order } from "@/utils/models/order.model";
-import { Cart } from "@/utils/models/cart.model";
-import { Product } from "@/utils/models/product.model";
-import { NextResponse } from "next/server";
-import { verifyToken } from "../auth/middleware";
+import {
+  connectDb
+} from "@/utils/dbconnect";
+import {
+  Order
+} from "@/utils/models/order.model";
+import {
+  NextResponse
+} from "next/server";
+import {
+  verifyToken
+} from "@/app/api/auth/middleware";
 
 // 📌 GET all orders (Admin only)
 async function getOrders(req, user) {
   try {
-    if (!user.isAdmin) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+    let orders = null;
+    await connectDb();
+    if (user.role == 'admin') {
+      orders = await Order.find()
+      // .populate("products.productId");
+    } else {
+      orders = await Order.find({
+        user: user.userId
+      })
+      // .populate("products.productId")
     }
 
-    await connectDb();
-    const orders = await Order.find().populate("products.product");
-
-    return NextResponse.json(
-      { message: "Successfully fetched orders", data: orders },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      message: "Successfully fetched orders",
+      orders
+    }, {
+      status: 200
+    });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error", error: error.message },
-      { status: 500 }
-    );
+    console.error(error)
+    return NextResponse.json({
+      message: "Internal server error",
+      error: error.message
+    }, {
+      status: 500
+    });
   }
 }
 export const GET = verifyToken(getOrders);
@@ -32,44 +48,61 @@ export const GET = verifyToken(getOrders);
 async function createOrder(req, user) {
   try {
     await connectDb();
-    const cart = await Cart.findOne({ userId: user.id }).populate("products.productId");
+    const {
+      products,
+      address,
+      couponApplied,
+      payment
+    } = await req.json();
 
-    if (!cart || cart.products.length === 0) {
-      return NextResponse.json({ message: "Cart is empty" }, { status: 400 });
+    if (!products?.length || !address || !payment) {
+      return NextResponse.json({
+        message: "Invalid sumbit",
+        data: null
+      }, {
+        status: 401
+      })
     }
+    if (payment.method != 'upi' && payment.upiId != 'testdemo@upi') {
+      return NextResponse.json({
+        message: 'Invalid payment details',
+        data: null
+      }, {
+        status: 402
+      })
+    }
+    const totalPrice = Math.round(products.reduce((price, p) => {
+      const toppingsPrice = (p.toppings || []).reduce((acc, t) => acc + t.price, 0)
+      const fruitsPrice = (p.fruits || []).reduce((acc, f) => acc + f.price, 0)
+      return price + (toppingsPrice + fruitsPrice + p.priceAtPurchase) * (p.quantity || 1) * (p.size?.value || 2.5) / 2.5
+    }, 0))
+    let discount = couponApplied?.value == 'USER50' ? totalPrice * 50 / 100 : 0
 
-    const totalPrice = cart.products.reduce(
-      (sum, item) => sum + item.productId.price * item.quantity,
-      0
-    );
-
-    const order = new Order({
-      user: user.id,
-      products: cart.products.map((p) => ({
-        product: p.productId._id,
-        quantity: p.quantity,
-        priceAtPurchase: p.productId.price,
-        name: p.productId.name,
-      })),
+    const newOrder = new Order({
+      user: user.userId,
+      products,
       totalPrice,
-      address: "Default Address", // replace with user input later
+      finalPrice: totalPrice - discount,
+      couponApplied: couponApplied ? [couponApplied] : [],
+      payment,
+      address,
+      deliveryWithin: Date.now() + 7 * 60 * 60 * 1000
+    })
+    await newOrder.save();
+    return NextResponse.json({
+      message: "Ordered successfully",
+      order: newOrder
+    }, {
+      status: 201
     });
-
-    await order.save();
-
-    // Clear cart after placing order
-    cart.products = [];
-    await cart.save();
-
-    return NextResponse.json(
-      { message: "Order created successfully", data: order },
-      { status: 201 }
-    );
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error", error: error.message },
-      { status: 500 }
-    );
+    console.error(error)
+    return NextResponse.json({
+      message: "Internal server error",
+      error: error.message
+    }, {
+      status: 500
+    });
   }
 }
 export const POST = verifyToken(createOrder);

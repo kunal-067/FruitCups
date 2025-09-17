@@ -1,7 +1,7 @@
 import { connectDb } from "@/utils/dbconnect";
 import { Coupon } from "@/utils/models/coupon.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "../auth/middleware";
+import { verifyToken } from "@/app/api/auth/middleware";
 
 // 📌 GET single coupon
 async function getCoupon(req, user, { params }) {

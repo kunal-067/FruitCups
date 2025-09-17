@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { REGISTER_API } from '@/lib/ApiRoutes';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { Spinner } from '@/components/others/Spinner';
 
 //form validation 
 const registrationSchema = z.object({
@@ -146,7 +147,7 @@ export default function Registration() {
                         disabled={isSubmitting}
                         className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600"
                     >
-                        {isSubmitting ? '...'  : 'Register'}
+                        {isSubmitting ? <Spinner/>  : 'Register'}
                     </Button>
                 </form>
                 <p className="text-center text-sm text-gray-600 mt-4">

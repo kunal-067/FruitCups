@@ -4,4 +4,5 @@ export const VERIFY_OTP = '/api/auth/verify-otp';
 export const RESEND_OTP = '/api/auth/resend-otp';
 
 export const GET_PRODUCTS = '/api/product';
-export const GET_PROFILE = '/api/profile'
+export const GET_PROFILE = '/api/profile';
+export const POST_REVIEW = '/api/review';

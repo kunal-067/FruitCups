@@ -4,7 +4,6 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Input } from "@/components/ui/input"
 
@@ -13,35 +12,57 @@ import { PopularCups, PopularDrinks } from "@/components/FruitCards"
 import WhyChooseUs from "@/components/others/WhyChooseUs"
 import { HomeScreenCustomizingCups } from "@/components/others/CustomizeCups"
 import { GET_PRODUCTS } from "@/lib/ApiRoutes"
+import Testimonials from "@/components/Testimonial"
 
 
 // Testimonials
 let testimonials = [
-    { id: 1, name: "Aman R.", text: "Perfect breakfast before college. Fresh and filling.", rating: 5 },
-    { id: 2, name: "Neha S.", text: "Affordable subscription & always on time.", rating: 5 },
-    { id: 3, name: "Rohit K.", text: "Good portion size and tasty fruits.", rating: 4 },
+    { _id: 1, name: "Aman R.", text: "Perfect breakfast before college. Fresh and filling.", rating: 5 },
+    { _id: 2, name: "Neha S.", text: "Affordable subscription & always on time.", rating: 5 },
+    { _id: 3, name: "Rohit K.", text: "Good portion size and tasty fruits.", rating: 4 },
+    { _id: 4, name: "Aman R.", text: "Perfect breakfast before college. Fresh and filling.", rating: 5 },
+    { _id: 5, name: "Neha S.", text: "Affordable subscription & always on time.", rating: 5 },
+    { _id: 6, name: "Rohit K.", text: "Good portion size and tasty fruits.", rating: 4 },
+    { _id: 7, name: "Aman R.", text: "Perfect breakfast before college. Fresh and filling.", rating: 5 },
+    { _id: 8, name: "Neha S.", text: "Affordable subscription & always on time.", rating: 5 },
+    { _id: 9, name: "Rohit K.", text: "Good portion size and tasty fruits.", rating: 4 },
 ]
 export default async function HomePage() {
-    const referralCode = "KF-REF-2025"
+    const referralCode = "KF-REF-2025";
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    let isCupLoading = true; // for future use currently useless
+    let isDrinkLoading = true; // for future use
 
     let products = [];
-    const res = await fetch(`${process.env.BASE_URL}${GET_PRODUCTS}?type=fruit`);
-    if (res.ok){
-        const data = await res.json();
-        products = data.products
-        // console.log('data --------', data)
-    }
-
     let drinks = [];
-    const drinkRes = await fetch(`${process.env.BASE_URL}${GET_PRODUCTS}?type=shake`);
-    if (res.ok){
-        const data = await drinkRes.json();
-        drinks = data.products
-        // console.log('data --------', data)
+
+    try {
+        const [res, drinkRes] = await Promise.all([
+            fetch(`${baseUrl}${GET_PRODUCTS}?type=fruit`, { next: { revalidate: 36 } }),
+            fetch(`${baseUrl}${GET_PRODUCTS}?type=shake`, { next: { revalidate: 3600 } }),
+        ]);
+
+        if (!res.ok) {
+            console.error(`Failed to fetch fruits: ${res.status} ${res.statusText}`);
+        } else {
+            const data = await res.json();
+            products = data.products || [];
+            isCupLoading = false;
+        }
+
+        if (!drinkRes.ok) {
+            console.error(`Failed to fetch drinks: ${drinkRes.status} ${drinkRes.statusText}`);
+        } else {
+            const data = await drinkRes.json();
+            drinks = data.products || [];
+            isDrinkLoading = false;
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error);
     }
 
     return (
-        <div className="min-h-screen bg-white text-slate-900">
+        <div className="min-h-screen bg-white text-slate-900 max-md:pb-14">
 
             {/* Hero - slideshow */}
             <Hero />
@@ -54,8 +75,12 @@ export default async function HomePage() {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                    {products.map((p) => (
-                        <PopularCups key={p._id} p={p} />
+                    {isCupLoading ? (
+                        Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="shimmer h-48 w-full rounded-lg" />)
+                    ) : (products.length === 0 ? (
+                        <p className="text-sm text-slate-500">No fruit cups available</p>
+                    ) : (
+                        products.map((p) => <PopularCups key={p._id} p={p} />)
                     ))}
                 </div>
             </section>
@@ -78,12 +103,12 @@ export default async function HomePage() {
                         </div>
                     </div>
                     <div className="w-40">
-                        <Image src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop" alt="premium" width={200} height={160} className="rounded-lg" />
+                        <Image src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop" alt="premium" width={200} height={160} className="rounded-lg object-cover" />
                     </div>
                 </div>
             </section>
 
-            {/* Membership & Coins */}
+            {/* Membership & Coins work left*/} 
             <section id="wallet" className="max-w-6xl mx-auto px-4 py-8">
                 <div className="grid md:grid-cols-3 gap-4">
                     <Card className="p-4">
@@ -94,7 +119,7 @@ export default async function HomePage() {
                             <div className="text-2xl font-bold">Premium — ₹499 / month</div>
                             <div className="text-sm text-slate-500 mt-1">Save up to 20% and enjoy free delivery.</div>
                             <div className="mt-4">
-                                {/* <Button className="w-full" >"Subscribe"</Button> */}
+                                <button className="w-full bg-black py-2 font-medium text-white rounded-sm" >"Subscribe"</button>
                             </div>
                         </CardContent>
                     </Card>
@@ -143,9 +168,15 @@ export default async function HomePage() {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {drinks.map(d => (
-                        <PopularDrinks key={d._id} d={d}/>
-                    ))}
+                    {isDrinkLoading ? (
+                        Array.from({ length: 8 }).map((_, index) => <Skeleton key={index} className="shimmer h-48 w-full rounded-lg" />)
+                    ) : (
+                        drinks.length === 0 ? (
+                            <p className="text-sm text-slate-500">No fruit shakes available</p>
+                        ) : (
+                            drinks.map(d => <PopularDrinks key={d._id} d={d} />)
+                        )
+                    )}
                 </div>
             </section>
 
@@ -153,25 +184,7 @@ export default async function HomePage() {
             <WhyChooseUs />
 
             {/* Testimonials */}
-            <section className="max-w-6xl mx-auto px-4 py-8">
-                <h3 className="text-2xl font-semibold mb-4">What Students Say</h3>
-                <div className="grid sm:grid-cols-3 gap-4">
-                    {testimonials.map(t => (
-                        <Card key={t.id} className="p-4">
-                            <CardContent>
-                                <div className="flex items-start gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-slate-100 grid place-items-center font-semibold">{t.name.split(" ")[0][0]}</div>
-                                    <div>
-                                        <div className="font-medium">{t.name}</div>
-                                        <div className="text-sm text-slate-500">{Array.from({ length: t.rating }).map((_, i) => "★").join("")}</div>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-slate-600 mt-3">{t.text}</p>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </section>
+            <Testimonials testimonials={testimonials}/>
 
             {/* Floating Track Order button */}
             {/* <button

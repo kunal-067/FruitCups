@@ -1,7 +1,7 @@
 import { connectDb } from "@/utils/dbconnect";
 import { User } from "@/utils/models/user.model";
 import { NextResponse } from "next/server";
-import { verifyToken } from "../auth/middleware";
+import { verifyToken } from "@/app/api/auth/middleware";
 
 // 📌 GET user profile
 async function getProfile(req, user) {
@@ -12,7 +12,7 @@ async function getProfile(req, user) {
     if (!profile) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-
+    
     return NextResponse.json(
       { message: "Successfully fetched profile", profile },
       { status: 200 }

@@ -9,6 +9,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    discount:{
+        type:String,
+        default:0
+    },
     nutrients: [{
         name: String,
         quantity: Number,
@@ -19,8 +23,12 @@ const productSchema = new mongoose.Schema({
         position: {
             type: Number,
             default: 0
-        }
+        },
+        portrait:String,
+        landScape:String,
     }],
+    highlighs:[String],
+    ingridients:[String],
     tag:String,  //slogons like energy booster, emunity booster etc
     type: {
         type: String,

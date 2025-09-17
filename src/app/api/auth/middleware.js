@@ -3,6 +3,7 @@ import {
   decodeAccessToken,
   signAccessToken
 } from "@/lib/jwt";
+import { connectDb } from "@/utils/dbconnect";
 import {
   User
 } from "@/utils/models/user.model";
@@ -15,8 +16,9 @@ import {
 } from "next/server";
 
 export const verifyToken = (handler) => {
-  return async (req) => {
+  return async (req, {params}) => {
     try {
+      await connectDb();
       const cookieStore = await cookies();
       let accessToken = cookieStore.get("accessToken")?.value;
       const refreshToken = cookieStore.get("refreshToken")?.value;
@@ -28,7 +30,7 @@ export const verifyToken = (handler) => {
       // No access token? try refreshing
       if (!accessToken) {
         const decoded = decodeRefreshToken(refreshToken);
-
+        // console.log('refresh decoded', decoded)
         const user = await User.findById(decoded.userId).select("+refreshToken.value +refreshToken.lastRefresh");
         if (!user) {
           return NextResponse.json({
@@ -38,7 +40,7 @@ export const verifyToken = (handler) => {
           });
         }
 
-        console.log(user)
+        console.log(user, 'this is user')
         const tokenMatch = await bcrypt.compare(refreshToken, user.refreshToken?.value);
         if (!tokenMatch) {
           return NextResponse.json({
@@ -69,7 +71,7 @@ export const verifyToken = (handler) => {
       const decoded = decodeAccessToken(accessToken);
       req.user = decoded;
 
-      return handler(req, decoded);
+      return handler(req, decoded, {params});
     } catch (error) {
       console.error("verifyToken error:", error);
       return NextResponse.json({

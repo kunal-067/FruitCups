@@ -32,6 +32,10 @@ const addressSchema = {
     landMark: {
         type: String,
         trim: true
+    },
+    isDefault:{
+        type:Boolean,
+        default:false
     }
 }
 
@@ -111,7 +115,7 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Phone is required'],
         match: [/^\+?[1-9]\d{9,14}$/, 'Please enter a valid phone number']
     },
-    address: addressSchema,
+    addresses: [addressSchema],
 
     orders: [{
         type: mongoose.Schema.Types.ObjectId,

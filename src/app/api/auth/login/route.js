@@ -103,7 +103,8 @@ export async function POST(req) {
       user: {
         userId: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        phone: user.phoe
       },
     });
   } catch (err) {
