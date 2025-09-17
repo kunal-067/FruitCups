@@ -13,7 +13,7 @@ import WhyChooseUs from "@/components/others/WhyChooseUs"
 import { HomeScreenCustomizingCups } from "@/components/others/CustomizeCups"
 import { GET_PRODUCTS } from "@/lib/ApiRoutes"
 import Testimonials from "@/components/Testimonial"
-
+import { Skeleton } from "@/components/ui/skeleton"
 
 // Testimonials
 let testimonials = [
