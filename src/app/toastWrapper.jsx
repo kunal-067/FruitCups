@@ -1,5 +1,5 @@
 'use client'
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import React from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import ReduxProviders from './ReduxProvider';
