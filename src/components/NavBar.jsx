@@ -12,22 +12,22 @@ const NavBar = () => {
         <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-slate-100">
             <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
-<div className='flex flex-row-reverse items-center gap-2'>
-                <button
-                    onClick={() => router.back()}
-                    className="md:hidden flex items-center justify-between gap-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 active:scale-95 transition"
-                >
-                    <ChevronLeft className="h-5 -ml-1" />
-                    {/* Back */}
-                </button>
-                <div className="flex items-center gap-3">
-                    <div onClick={e => router.push('/')} className="w-10 h-10 rounded-lg bg-emerald-50 grid place-items-center text-emerald-700 font-bold">KF</div>
-                    <div onClick={e => router.push('/')} className="hidden sm:block cursor-pointer">
-                        <div className="font-semibold">KotaFruit</div>
-                        <div className="text-xs text-slate-500 -mt-0.5">Fresh cups • Daily delivery</div>
+                <div className='flex flex-row-reverse items-center gap-2'>
+                    <button
+                        onClick={() => router.back()}
+                        className="md:hidden flex items-center justify-between gap-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 active:bg-gray-200 active:scale-95 transition"
+                    >
+                        <ChevronLeft className="h-5 -ml-1" />
+                        {/* Back */}
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <div onClick={e => router.push('/')} className="w-10 h-10 rounded-lg bg-emerald-50 grid place-items-center text-emerald-700 font-bold">KF</div>
+                        <div onClick={e => router.push('/')} className="hidden sm:block cursor-pointer">
+                            <div className="font-semibold">KotaFruit</div>
+                            <div className="text-xs text-slate-500 -mt-0.5">Fresh cups • Daily delivery</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
                 <nav className="hidden md:flex items-center gap-6 text-sm">
                     <Link href="/" className={`hover:text-emerald-600 ${(path == '/' || path == '/home') && 'text-emerald-600'}`}>Home</Link>
@@ -38,8 +38,8 @@ const NavBar = () => {
                     <Link href="/#contact" className={`hover:text-emerald-600 ${path == '/#contact' && 'text-emerald-600'}`}>Contact</Link>
                 </nav>
                 <div className="flex items-center gap-3">
-                    <button onClick={e => router.push('/profile')} className={`p-2 rounded-md hover:bg-gray-200 ${path == '/profile' && 'bg-gray-200'}`}><User className="h-5 w-5 text-slate-700" /></button>
-                    <button onClick={e => router.push('/cart')} className={`relative p-2 rounded-md hover:bg-gray-200 ${path == '/cart' && 'bg-gray-200'}`} aria-label="Cart">
+                    <button onClick={e => router.push('/profile')} className={`p-2 rounded-md hover:bg-gray-200 active:bg-gray-200 ${path == '/profile' && 'bg-gray-200'}`}><User className="h-5 w-5 text-slate-700" /></button>
+                    <button onClick={e => router.push('/cart')} className={`relative p-2 rounded-md hover:bg-gray-200 active:bg-gray-200 ${path == '/cart' && 'bg-gray-200'}`} aria-label="Cart">
                         <ShoppingCart className="h-5 w-5" />
                         {cart.length > 0 && (
                             <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-xs w-5 h-5 rounded-full grid place-items-center">{cart.length}</span>

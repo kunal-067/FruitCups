@@ -13,11 +13,11 @@ const Footer = () => {
             {/* Sticky bottom nav for mobile */}
             <nav className="fixed bottom-0 left-0 right-0 bg-white border-t md:hidden">
                 <div className="max-w-6xl mx-auto px-4 flex justify-between items-center py-2">
-                    <button onClick={e=>router.push('/')} className={`flex flex-col items-center text-xs text-slate-700  hover:bg-gray-200 p-1 rounded-md ${(path=='/' || path=='/home')&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><Home className="h-5 w-5" /><span>Home</span></button>
-                    <button onClick={e=>router.push('/#menu')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 p-1 rounded-md ${path=='/#menu'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><PackagePlus className="h-5 w-5" /><span>Menu</span></button>
-                    <button onClick={e=>router.push('/customize')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 p-1 rounded-md ${path=='/customize'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><Settings2 className="h-5 w-5" /><span>Customize</span></button>
-                    <button onClick={e=>router.push('/wallet')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 p-1 rounded-md ${path=='/wallet'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><Wallet className="h-5 w-5" /><span>Wallet</span></button>
-                    <button onClick={e=>router.push('/membership')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 p-1 rounded-md ${path=='/membership'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><PercentDiamondIcon className="h-5 w-5" /><span>Prime</span></button>
+                    <button onClick={e=>router.push('/')} className={`flex flex-col items-center text-xs text-slate-700  hover:bg-gray-200 active:bg-gray-200 p-1 rounded-md ${(path=='/' || path=='/home')&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><Home className="h-5 w-5" /><span>Home</span></button>
+                    <button onClick={e=>router.push('/#menu')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 active:bg-gray-200 p-1 rounded-md ${path=='/#menu'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><PackagePlus className="h-5 w-5" /><span>Menu</span></button>
+                    <button onClick={e=>router.push('/customize')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 active:bg-gray-200 p-1 rounded-md ${path=='/customize'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><Settings2 className="h-5 w-5" /><span>Customize</span></button>
+                    <button onClick={e=>router.push('/wallet')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 active:bg-gray-200 p-1 rounded-md ${path=='/wallet'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><Wallet className="h-5 w-5" /><span>Wallet</span></button>
+                    <button onClick={e=>router.push('/membership')} className={`flex flex-col items-center text-xs text-slate-700 hover:bg-gray-200 active:bg-gray-200 p-1 rounded-md ${path=='/membership'&&'bg-gray-200 -mt-8 shadow-lg shadow-gray-800'}`}><PercentDiamondIcon className="h-5 w-5" /><span>Prime</span></button>
                 </div>
             </nav>
 

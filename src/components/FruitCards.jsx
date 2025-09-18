@@ -41,10 +41,10 @@ export function PopularCups({ p = fallbackProd }) {
                 </div>
                 <p className="text-emerald-600 font-semibold mt-2">₹{p.price} <span className="text-black text-[12px]"> / 250g</span></p>
                 <div className="mt-3 flex items-center gap-2">
-                    <Button size="sm" className='hover:bg-gray-600' onClick={e => addToCart(p)} >
+                    <Button size="sm" className='hover:bg-gray-600 active:bg-gray-600' onClick={e => addToCart(p)} >
                         Add
                     </Button>
-                    <Link href={`/cups/${p._id}`} className="text-sm text-slate-500 ml-auto hover:border-1 py-1 px-2 rounded-sm border-gray-400">Details →</Link>
+                    <Link href={`/cups/${p._id}`} className="text-sm text-slate-500 ml-auto hover:border-1 active:border py-1 px-2 rounded-sm border-gray-400">Details→</Link>
                 </div>
             </CardContent>
         </Card>
