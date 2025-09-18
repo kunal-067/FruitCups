@@ -48,64 +48,75 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white py-4 mb:py-10 px-3 lg:px-6">
-            <div className="max-w-6xl mx-auto space-y-4 md:space-y-10">
+        <div className="bg-gradient-to-b to-white py-4 max-sm:pb-24 sm:py-10 px-2 lg:px-6">
+            <div className="max-w-6xl mx-auto space-y-2 md:space-y-10">
 
                 {/* Title */}
-                <h1 className="text-2xl md:text-3xl font-bold text-green-600 mb:0 md:mb-6">
-                    Your Cart 🛒 {cart.length}
+                <h1 className="text-xl sm:text-3xl font-bold text-green-900 sm:mb-6">
+                    Your Cart 🛒
                 </h1>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-10">
-
-                    {/* Cart Items */}
-                    <Card className="lg:col-span-2 shadow-xl rounded-2xl">
-                        <CardContent className="p-4 lg:p-6 space-y-6">
-                            {cart.length === 0 ? (
-                                <p className="text-center text-gray-600">
-                                    Your cart is empty. Add some fruits 🍓
-                                </p>
-                            ) : (
-                                cart?.map((item, index) => (
-                                    <CartItem key={item._id + index} item={item} />
-                                ))
-                            )}
+                {cart.length == 0 ? (
+                    <Card className='border-none shadow-none'>
+                        <CardContent className='flex flex-col items-center border-none'>
+                            <p className="text-center text-gray-600">
+                                Your cart is empty. Add some fruits 🍓
+                            </p>
+                            <Button className='mx-auto px-12 mt-4'>Explore Cups</Button>
                         </CardContent>
                     </Card>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-10">
 
-                    {/* Summary */}
-                    <Card className="shadow-xl rounded-2xl">
-                        <CardContent className="p-6 space-y-6">
-                            <h2 className="text-2xl font-semibold text-green-600">
-                                Order Summary
-                            </h2>
+                        {/* Cart Items */}
+                        <Card className="lg:col-span-2 shadow-xl rounded-2xl">
+                            <CardContent className="p-2 md:p-4 lg:p-6 space-y-6">
+                                {cart.length === 0 ? (
+                                    <p className="text-center text-gray-600">
+                                        Your cart is empty. Add some fruits 🍓
+                                    </p>
+                                ) : (
+                                    cart?.map((item, index) => (
+                                        <CartItem key={item._id + index} item={item} />
+                                    ))
+                                )}
+                            </CardContent>
+                        </Card>
 
-                            <div className="space-y-2 text-gray-700">
-                                <p>Subtotal: <span className="font-semibold">₹{cartTotal}</span></p>
-                                <p>Delivery Fee: <span className="font-semibold">₹20</span></p>
-                                <p className="text-lg font-bold">
-                                    Total: <span className="text-green-600">₹{cartTotal + 20}</span>
-                                </p>
-                            </div>
+                        {/* Summary */}
+                        <Card className="shadow-xl rounded-2xl">
+                            <CardContent className="space-y-4 max-sm:px-4">
+                                <h2 className="text-xl font-semibold text-green-900">
+                                    Order Summary
+                                </h2>
 
-                            <CouponCard />
-                            <Button onClick={proceed} className="w-full bg-orange-600 text-white text-lg py-3 rounded-xl hover:bg-orange-700 transition">
-                                Proceed to Checkout
-                            </Button>
+                                <div className="space-y-1 text-gray-700">
+                                    <p>Subtotal: <span className="font-semibold">₹{cartTotal}</span></p>
+                                    <p>Delivery Fee: <span className="font-semibold">₹20</span></p>
+                                    <p className=" text-md font-bold">
+                                        Total: <span className="text-emerald-700 text-lg font-medium">₹{cartTotal + 20}</span>
+                                    </p>
+                                </div>
 
-                            {/* Extra: Membership CTA */}
-                            <div className="bg-yellow-50 p-4 rounded-xl mt-4">
-                                <h3 className="text-lg font-semibold">🍎 Save with Subscription</h3>
-                                <p className="text-sm text-gray-600 mt-1">
-                                    Get daily cups delivered at a lower price. Weekly, monthly, and 3-month plans available.
-                                </p>
-                                <Button className="mt-3 w-full bg-yellow-500 hover:bg-yellow-600">
-                                    Explore Subscription Plans
+                                <CouponCard />
+                                <Button onClick={proceed} className="w-full bg-orange-600 text-white text-lg py-3 rounded-md hover:bg-orange-700 transition">
+                                    Proceed to Checkout
                                 </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+
+                                {/* Extra: Membership CTA */}
+                                <div className="bg-yellow-50 p-4 rounded-xl mt-4">
+                                    <h3 className="text-lg font-semibold">🍎 Save with Subscription</h3>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                        Get daily cups delivered at a lower price. Weekly, monthly, and 3-month plans available.
+                                    </p>
+                                    <Button className="mt-3 w-full bg-yellow-500 hover:bg-yellow-600">
+                                        Explore Subscription Plans
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -175,7 +186,7 @@ function CartItem({ item }) {
             <div className="flex items-center gap-4">
                 <div className="flex flex-col">
                     <Badge>{item.size?.name}</Badge>
-                    <span className="font-bold text-green-600">
+                    <span className="font-bold text-green-900">
                         ₹{finalPrice}
                     </span>
                 </div>
@@ -210,7 +221,7 @@ export function CouponCard() {
         }
     }
     return (
-        <div className="flex gap-3 items-center">
+        <div className="flex flex-wrap gap-2 items-center">
             <input
                 value={coupon}
                 onChange={(e) => setCoupon(e.target.value)}
@@ -219,7 +230,7 @@ export function CouponCard() {
             />
             <Button onClick={applyCoupon}>Apply</Button>
             {/* {couponApplied && (
-                <div className={`text-sm ${couponApplied.discount ? "text-green-600" : "text-red-600"}`}>
+                <div className={`text-sm ${couponApplied.discount ? "text-green-900" : "text-red-600"}`}>
                     {couponApplied.invalid ? "Invalid coupon" : `${couponApplied?.discount}% applied`}
                 </div>
             )} */}

@@ -1,6 +1,6 @@
 // import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
+import NavBar, { Back } from "@/components/NavBar";
 import Footer from "@/components/Footer";
 // import ToastWrapper from "./ToastWrapper";
 import Wrapper from "./ToastWrapper";
@@ -28,9 +28,10 @@ export default function RootLayout({ children }) {
       >
         <Wrapper>
           <NavBar />
+          {/* <Back/> */}
           {children}
         </Wrapper >
-          <Footer />
+        <Footer />
       </body>
     </html>
   );

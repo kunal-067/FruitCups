@@ -106,7 +106,7 @@ export default function OTP() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-2 md:p-4">
-      <div className="bg-white py-6 px-5 md:p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+      <div className="bg-white py-6 px-5 md:p-6 rounded-lg shadow-lg max-sm:shadow-none w-full max-w-md text-center">
         <h1 className="text-xl md:text-2xl font-bold text-green-700 mb-4">
           Verify Your OTP
         </h1>

@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center p-2 pt-10 md:pt-20 md:p-4">
-      <div className="bg-white py-6 px-5 md:p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white py-6 px-5 md:p-6 rounded-lg shadow-lg max-sm:shadow-none w-full max-w-md">
         <h1 className="text-xl md:text-2xl font-bold text-green-700 text-center mb-4 md:mb-6">Welcome to FruitCup</h1>
         <p className="text-center text-gray-600 text-[14px] md:text-[16px] mb-6">Log in to order fresh fruit cups and juices!</p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

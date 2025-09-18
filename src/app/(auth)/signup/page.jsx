@@ -69,7 +69,7 @@ export default function Registration() {
 
     return (
         <div className="flex items-center justify-center md:pt-10 md:p-4">
-            <div className="bg-white py-6 px-5 md:px-6 rounded-lg shadow-lg w-full max-w-md">
+            <div className="bg-white py-6 px-5 md:px-6 rounded-lg shadow-lg max-sm:shadow-none w-full max-w-md">
                 <h1 className="text-xl md:text-2xl font-bold text-green-700 text-center mb-2 md:mb-6">Join FruitCup</h1>
                 <p className="text-center text-gray-600 text-[14px] md:text-[16px] mb-6">Sign up to enjoy fresh fruit cups and juices!</p>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

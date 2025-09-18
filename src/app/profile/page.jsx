@@ -32,6 +32,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchUser } from "@/redux/slices/userSlice"
+import { useRouter } from "next/navigation"
 
 // Zod schema for form validation
 const profileSchema = z.object({
@@ -41,6 +42,7 @@ const profileSchema = z.object({
 
 export default function ProfilePage() {
     const dispatch = useDispatch();
+    const router = useRouter();
 
     useEffect(() => { dispatch(fetchUser()) }, [dispatch])
     let { data, loading, error } = useSelector(state => state.user);
@@ -77,11 +79,11 @@ export default function ProfilePage() {
 
 
     return (
-        <div className="p-4 flex flex-col items-center md:p-10">
-            <div className="grid max-w-6xl lg:grid-cols-5 gap-8">
+        <div className="px-3 py-4 -sm:p-4 flex flex-col items-center max-sm:pb-24 sm:p-10">
+            <div className="grid max-w-6xl lg:grid-cols-5 max-sm:gap-4 gap-8">
                 {/* Sidebar */}
                 <Card className="lg:col-span-2 shadow-md">
-                    <CardContent className="flex flex-col items-center text-center p-6">
+                    <CardContent className="flex flex-col items-center text-center max-sm:pb-0 p-6">
                         <Image
                             src={'/demo-b-profile.jpg'}
                             alt="User Avatar"
@@ -132,7 +134,7 @@ export default function ProfilePage() {
 
                     <Separator />
 
-                    <CardContent className="p-4 space-y-4">
+                    <CardContent className="max-sm:pt-0 p-4 space-y-4">
                         <Button
                             variant="default"
                             className="w-full justify-start gap-2"
@@ -143,7 +145,7 @@ export default function ProfilePage() {
                         <Button
                         variant={"ghost"}
                             className="w-full justify-start gap-2"
-                            // onClick={() => setActiveTab("orders")}
+                            onClick={() => router.push('/orders')}
                         >
                             <ShoppingBag size={18} /> My Orders
                         </Button>
@@ -180,12 +182,12 @@ export default function ProfilePage() {
                                     <Coins className="text-yellow-500" /> My Coins
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-2xl font-bold">{user?.coins} Coins</p>
+                            <CardContent className='max-sm:pt-0'>
+                                <p className="text-lg font-semibold"><span className="text-emerald-600 text-2xl">{user?.coins || 0}</span> Coins</p>
                                 <p className="text-gray-500 text-sm">Use coins for discounts on checkout</p>
                                 <Button
                                     size="sm"
-                                    className="mt-3 bg-blue-600 hover:bg-blue-700"
+                                    className="mt-3 bg-blue-600 hover:bg-blue-800"
                                 >
                                     Earn Coins
                                 </Button>
@@ -199,7 +201,9 @@ export default function ProfilePage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
-                                {user?.coupons?.map((coupon, idx) => (
+                                {!user?.coupons?.length ? (
+                                    <p className="text-gray-500 -mt-4">You have no coupons</p>
+                                ) : (user?.coupons.map((coupon, idx) => (
                                     <div key={idx} className="flex items-center justify-between border rounded-lg p-3">
                                         <div>
                                             <h3 className="font-semibold">{coupon.code}</h3>
@@ -213,7 +217,7 @@ export default function ProfilePage() {
                                             {appliedCoupons.includes(coupon.code) ? "Applied" : "Apply"}
                                         </Button>
                                     </div>
-                                ))}
+                                )))}
                             </CardContent>
                         </Card>
                     </div>

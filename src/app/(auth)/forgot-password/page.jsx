@@ -44,7 +44,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex items-center justify-center pt-10 md:pt-20 p-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-sm:shadow-none w-full max-w-md text-center">
         <h1 className="text-xl md:text-2xl font-bold text-green-700 mb-4">Forgot Password</h1>
         <p className="text-gray-600 text-[14px] md:text-[16px] mb-6">Enter your email to reset your password.</p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
