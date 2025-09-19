@@ -77,10 +77,10 @@ export const ImageCaresoul = ({ product = fallbackProd }) => {
                 </div>
             </div>
 
-            <div className="flex gap-3 mt-4 md:hidden justify-center">
+            {/* <div className="flex gap-3 mt-4 md:hidden justify-center">
                 <Button className="flex-1" onClick={() => alert("Add to cart mock")}>Add to Cart</Button>
                 <Button className="flex-1" onClick={() => alert("Buy now mock")}>Buy Now</Button>
-            </div>
+            </div> */}
         </div>
     )
 }

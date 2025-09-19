@@ -9,14 +9,18 @@ import { Wallet, CreditCard, Smartphone, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import axios from "axios";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "@/redux/slices/cartSlice";
 import { clearCheckout } from "@/redux/slices/checkOutSlice";
+import { Spinner } from "@/components/others/Spinner";
 
 export default function PaymentPage() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const [payingAmount, setPyingAmount] = useState(searchParams.get('pay' || ''))
+
   const { products, usingAddress } = useSelector(state => state.checkout)
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [ordering, setOrdering] = useState(false);
@@ -62,30 +66,45 @@ export default function PaymentPage() {
     setNewCvv("");
   };
 
-  const handlePlaceOrder = () => {
+  const handleSubmit = () => {
     setOrdering(true);
-    const paymentDetails = {
-      method: paymentMethod,
-      upiApp: paymentMethod === "upi" ? upiApp : null,
-      upiId: paymentMethod === "upi" ? upiId : null,
-      // card: paymentMethod === "card" ? savedCards.find(c => c.id === selectedCard) : null,
-    };
 
-    const data = {
-      products,
-      address: usingAddress,
-      payment: paymentDetails
-    };
-    axios.post('/api/orders', data, { withCredentials: true }).then(res => {
-      dispatch(clearCart());
-      dispatch(clearCheckout());
-      router.push(`/checkout/success?orderId=${res.data.order?._id}`)
-      toast.success(res.data?.message || 'Order completed !');
-    }).catch(err => {
-      console.log(err)
-      setOrdering(false)
-      toast.error(err.response.data?.message || 'Error while ordering')
-    })
+    if (searchParams.get('order')) {
+      const paymentDetails = {
+        method: paymentMethod,
+        upiApp: paymentMethod === "upi" ? upiApp : null,
+        upiId: paymentMethod === "upi" ? upiId : null,
+        // card: paymentMethod === "card" ? savedCards.find(c => c.id === selectedCard) : null,
+      };
+
+      const data = {
+        products,
+        address: usingAddress,
+        payment: paymentDetails
+      };
+      axios.post('/api/orders', data, { withCredentials: true }).then(res => {
+        dispatch(clearCart());
+        dispatch(clearCheckout());
+        router.push(`/checkout/success?order=true&orderId=${res.data.order?._id}`)
+        toast.success(res.data?.message || 'Order completed !');
+      }).catch(err => {
+        console.log(err)
+        setOrdering(false)
+        toast.error(err.response.data?.message || 'Error while ordering')
+      })
+    }
+
+    const membershipId = searchParams.get('membership'); 
+    if(membershipId){
+      axios.patch('/api/membership', {membershipId, upiId}, {withCredentials:true}).then(res=>{
+        router.push(`/checkout/success?membership=true&pay=${payingAmount}`)
+        toast.success(res.data?.message || 'Payment completed !');
+      }).catch(err => {
+        console.log(err)
+        setOrdering(false)
+        toast.error(err.response.data?.message || 'Error while ordering')
+      })
+    }
   };
 
   return (
@@ -228,9 +247,9 @@ export default function PaymentPage() {
             <Button
               disabled={ordering}
               className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 mt-4"
-              onClick={handlePlaceOrder}
+              onClick={handleSubmit}
             >
-              {ordering?<Spinne/> : `Confirm & Pay ₹{finalPrice}`}
+              {ordering ? <Spinner /> : `Confirm & Pay ${payingAmount}`}
             </Button>
           </CardContent>
         </Card>

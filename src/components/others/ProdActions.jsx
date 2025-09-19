@@ -51,8 +51,8 @@ export function CartOrBuy({ p }) {
     }
     return (
         <>
-            <Button onClick={() => addToCart(p)}>Add to Cart</Button>
-            <Button onClick={() => alert("Buy now (mock)")} className="bg-amber-500 hover:bg-amber-600">Buy Now</Button>
+            <Button onClick={() => addToCart(p)} className='px-8'>Add to Cart</Button>
+            {/* <Button onClick={() => alert("Buy now (mock)")} className="bg-amber-500 hover:bg-amber-600">Buy Now</Button> */}
         </>
     )
 }
@@ -102,7 +102,7 @@ export function FinalPrice({ p }) {
     }, [dispatch, p])
 
     return (
-        <div className="text-lg font-semibold">₹{finalPrice}</div>
+        <div className="text-2xl text-green-700 px-2 font-semibold border rounded-sm border-red-400">₹{finalPrice}</div>
     );
 }
 

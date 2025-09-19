@@ -23,7 +23,7 @@ export default function OrderSummaryPage() {
   const total = subtotal + delivery - discount;
 
   function proceed() {
-    router.push('/checkout/payment')
+    router.push('/checkout/payment?order=true')
   }
 
   useEffect(() => {

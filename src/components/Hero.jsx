@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import Link from 'next/link'
+import { MessageCircle, Phone } from 'lucide-react'
 
 
 // Slideshow
@@ -60,9 +61,41 @@ const popular = [
 const Hero = () => {
     const [slideIndex, setSlideIndex] = useState(0)
 
+    const phoneNumber = "+919241033110"; // replace with your number
+    const whatsappNumber = "919122874046"; // without "+" for WhatsApp link
+
+    const handleWhatsApp = () => {
+        window.open(`https://wa.me/${whatsappNumber}`, "_blank");
+    };
+
+    const handleCall = () => {
+        window.location.href = `tel:${phoneNumber}`;
+    };
+
     return (
         <section className="relative overflow-hidden">
             <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+                <p className=''>
+                    Make for demo and show case only so there is no proper auth / nav and other functions conact us for development
+                </p>
+                <div className='flex pb-4 gap-2 pt-1'>
+                    <Button
+                        onClick={handleWhatsApp}
+                        className="bg-green-700 hover:bg-green-900 text-white flex items-center gap-2"
+                    >
+                        <MessageCircle className="w-4 h-4" />
+                        WhatsApp
+                    </Button>
+
+                    {/* Call Button */}
+                    <Button
+                        onClick={handleCall}
+                        className="bg-blue-700 hover:bg-blue-900 text-white flex items-center gap-2"
+                    >
+                        <Phone className="w-4 h-4" />
+                        Call +91-9241033110
+                    </Button>
+                </div>
                 <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-50 to-white shadow-md">
                     {/* image background */}
                     <div className="absolute inset-0">
@@ -80,7 +113,7 @@ const Hero = () => {
                             <div className="mt-4 flex gap-3">
                                 <Button asChild className="bg-yellow-400 text-black hover:bg-yellow-500">
                                     <Link href="/menu">Shop Now</Link>
-                                </Button> 
+                                </Button>
                                 <Button asChild variant="outline" className="border-yellow-400 text-yellow-400 hover:bg-yellow-50">
                                     <Link href="/premium">Get Premium</Link>
                                 </Button>
@@ -88,8 +121,8 @@ const Hero = () => {
                         </div>
 
                         <div className="w-full md:w-1/3 flex justify-center">
-                            <div className="w-48 h-48 md:w-64 md:h-64 rounded-xl overflow-hidden shadow-xl bg-white/60 p-3">
-                                <Image src={popular[1].img} alt="featured cup" width={400} height={400} className="object-cover rounded-lg" />
+                            <div className="w-48 h-48 md:w-64 md:h-64 rounded-xl overflow-hidden shadow-xl bg-white/60 p-2">
+                                <Image src={'https://images.pexels.com/photos/5945726/pexels-photo-5945726.jpeg?auto=compress&cs=tinysrgb&h=350'} alt="featured cup" width={400} height={400} className="object-cover rounded-lg" />
                             </div>
                         </div>
                     </div>

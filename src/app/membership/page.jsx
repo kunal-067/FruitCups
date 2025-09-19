@@ -26,20 +26,20 @@ export default function SubscribePage() {
   const [selectedPlan, setSelectedPlan] = useState("#PLAN2");
   const [slot, setSlot] = useState("morning");
   const [billing, setBilling] = useState("monthly");
-  const auth = useSelector(state=>state.auth);
+  const auth = useSelector(state => state.auth);
   const router = useRouter();
- 
+
   const plan = plans.find((p) => p.id === selectedPlan);
 
   function handleCheckout() {
-    if(!auth.isVerified){
+    if (!auth.isVerified) {
       return router.push(`/login?prime=true&slot=${slot}&billing=${billing}`)
     }
-    axios.post('/api/subscribe',{planId:selectedPlan, slot, billing}).then(res=>{
-      console.log(res.data); 
-      router.push(`/checkout/payment?pay=${plan[res.data?.billing || 'montly']}`);
+    axios.post('/api/membership', { planId: selectedPlan, slot, billing }).then(res => {
+      console.log(res.data);
+      router.push(`/checkout/payment?membership=${res.data.data?._id}&pay=${plan[res.data.data?.billing || 'montly']}`);
       toast(res.data?.message || "Subscribed successfully")
-    }).catch(err=>{
+    }).catch(err => {
       console.log(err);
       toast(err.response.data?.message || 'Error while subscribing')
     })
@@ -50,6 +50,7 @@ export default function SubscribePage() {
       <div className="mx-auto space-y-8">
         {/* Hero */}
         <section className="text-center space-y-1">
+          <Button onClick={e=>router.push('/membership/track')} className='active:bg-gray-700 hover:bg-gray-700 px-8'>You Prime</Button>
           <h1 className="text-2xl md:text-3xl font-bold">Join Prime 🍓</h1>
           <p className="max-sm:text-[14px] text-muted-foreground max-w-2xl mx-auto">
             Fresh fruit cups delivered to your door every day. Choose a plan, pick your time slot, and enjoy health on autopilot.
@@ -67,9 +68,9 @@ export default function SubscribePage() {
         <div className="grid gap-6 md:grid-cols-3">
           {plans.map((plan) => (
             <Card
-            onClick={e=>setSelectedPlan(plan.id)}
+              onClick={e => setSelectedPlan(plan.id)}
               key={plan.name}
-              className={`relative transition hover:shadow-xl ${selectedPlan===plan.id ? "border-indigo-500 shadow-lg shadow-indigo-100" : ""
+              className={`relative transition hover:shadow-xl ${selectedPlan === plan.id ? "border-indigo-500 shadow-lg shadow-indigo-100" : ""
                 }`}
             >
               {plan.highlight && (

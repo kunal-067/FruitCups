@@ -16,6 +16,7 @@ if (!global.mongoose) {
 
 export async function connectDb() {
     try {
+        // console.log(cached.conn, 'cached conn')
         if (cached.conn) {
             return cached.conn;
         }

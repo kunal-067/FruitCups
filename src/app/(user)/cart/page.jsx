@@ -15,7 +15,7 @@ import axios from "axios";
 
 export default function CartPage() {
     const dispatch = useDispatch();
-    const router = useRouter()
+    const router = useRouter();
     const cart = useSelector(state => state.cart);
     const { addresses } = useSelector(state => state.checkout)
     const { isVerified } = useSelector(state => state.auth);
@@ -37,11 +37,11 @@ export default function CartPage() {
             dispatch(addCheckoutProducts({ ...item, customizations: { toppings, fruits }, priceAtPurchase: price, productId: _id }))
         })
         if (isVerified) {
-            if (addresses?.length !== 0) {
+            // if (addresses?.length !== 0) {
                 router.push('/checkout/address/new')
-            } else {
-                router.push(`/checkout/summay?addressId=${addresses[0]._id}`)
-            }
+            // } else {
+            //     router.push(`/checkout/summay?addressId=${addresses[0]._id}`)
+            // }
         } else {
             router.push('/login')
         }
@@ -99,7 +99,7 @@ export default function CartPage() {
                                 </div>
 
                                 <CouponCard />
-                                <Button onClick={proceed} className="w-full bg-orange-600 text-white text-lg py-3 rounded-md hover:bg-orange-700 transition">
+                                <Button onClick={proceed} className="w-full bg-orange-600 active:bg-amber-500 text-white text-lg py-3 rounded-md hover:bg-orange-700 transition">
                                     Proceed to Checkout
                                 </Button>
 

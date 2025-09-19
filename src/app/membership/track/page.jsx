@@ -19,6 +19,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Separator } from "@/components/ui/separator";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Edit, Pause, Play, RefreshCw, Phone, Copy, Calendar, Gift } from "lucide-react";
+import axios from "axios";
+import { defaultScheduledPlan } from "@/lib/planConfigs";
 
 // ---------- Demo/mock defaults ----------
 const DEFAULT_REFERRAL = "KF-REF-2025";
@@ -41,9 +43,11 @@ const PLANS = {
 // ---------- Helpers ----------
 const STORAGE_KEY = "prime_dashboard_v1";
 
-function loadState() {
+async function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+    const userRes = await axios.get('/api/profile')
+    const subRes = await axios.get('/api/membership')
     if (!raw) return null;
     return JSON.parse(raw);
   } catch {
@@ -76,8 +80,8 @@ export default function DashboardPage() {
     }
   );
 
-  const [schedule, setSchedule] = useState(persisted?.schedule || DEFAULT_WEEK);
-  const [skipped, setSkipped] = useState(persisted?.skipped || {}); // { monday: true }
+  const [schedule, setSchedule] = useState(persisted?.schedule || defaultScheduledPlan);
+  const [skipped, setSkipped] = useState([]); // { monday: true }
   const [streak, setStreak] = useState(persisted?.streak ?? 3); // demo streak days
   const [recommendations, setRecommendations] = useState([
     { id: "papaya", name: "Papaya Cup", reason: "Popular on Fridays" },
@@ -104,8 +108,8 @@ export default function DashboardPage() {
   // ---------- Actions ----------
   function handleSkipDay(day) {
     setSkipped(prev => {
-      const next = { ...prev, [day]: !prev[day] }; // toggle
-      return next;
+      // const next = { ...prev, [day]: !prev[day] }; // toggle
+      return prev.includes(day) ? [...prev.filter(e=>e!==day)] : [...prev, day];
     });
 
     // optional: adjust remainingDays
@@ -180,7 +184,7 @@ export default function DashboardPage() {
 
   // ---------- UI ----------
   return (
-    <main className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <main className="min-h-screen bg-gray-50 p-4 max-md:pb-24 md:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -194,6 +198,30 @@ export default function DashboardPage() {
               <div className="font-medium">{PLANS[subscription.plan]?.name} • <span className="text-emerald-600">{remainingDays} days left</span></div>
             </div>
             <Badge variant={subscription.status === "active" ? "default" : "secondary"}>{subscription.status.toUpperCase()}</Badge>
+          </div>
+        </div>
+
+        <div className="left-0 right-0 bottom-0 md:bottom-6 flex justify-center pointer-events-none">
+          <div className="max-w-6xl w-full md:px-0 pointer-events-auto">
+            <div className="bg-white rounded-xl shadow-lg p-3 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div>
+                  <div className="text-sm text-slate-500">Plan</div>
+                  <div className="font-medium">{PLANS[subscription.plan]?.name} • ₹{PLANS[subscription.plan]?.price}</div>
+                </div>
+
+                <div className="hidden md:block">
+                  <div className="text-xs text-slate-500">Expiry</div>
+                  <div className="text-sm">{formatDate(subscription.endDate)}</div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button onClick={handleRenew} disabled={loading}><RefreshCw size={16} className="mr-2" />{loading ? "Renewing..." : "Renew"}</Button>
+                <Button variant="outline" onClick={handlePauseResume}>{isPaused ? <Play size={16} className="mr-2" /> : <Pause size={16} className="mr-2" />}{isPaused ? "Resume" : "Pause"}</Button>
+                <Button onClick={handleUpgrade} className="bg-amber-400 text-black"><Gift size={16} className="mr-2" />Upgrade</Button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -250,24 +278,24 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {Object.entries(schedule).map(([day, info]) => {
-                    const isSkipped = !!skipped[day];
+                  {schedule.map((info) => {
+                    const isSkipped = !!skipped[info.day];
                     return (
-                      <div key={day} className={`border rounded-lg p-3 bg-white flex flex-col`}>
+                      <div key={info.day} className={`border rounded-lg p-3 bg-white flex flex-col`}>
                         <div className="flex items-center gap-2">
                           <div className={`w-12 h-12 rounded-md bg-slate-100 grid place-items-center overflow-hidden`}>
                             {/* Use Image if you have real assets */}
-                            <Image src={info.img || "/placeholder.png"} alt={info.name} width={48} height={48} className="object-cover" />
+                            <Image src={info.cupImage || "/placeholder.png"} alt={info.cupName} width={48} height={48} className="object-cover" />
                           </div>
                           <div className="flex-1">
-                            <div className="font-medium capitalize">{day}</div>
-                            <div className={`text-sm ${isSkipped ? "line-through text-slate-400" : "text-slate-700"}`}>{info.name}</div>
+                            <div className="font-medium capitalize">{info.day}</div>
+                            <div className={`text-sm ${isSkipped ? "line-through text-slate-400" : "text-slate-700"}`}>{info.cupName}</div>
                           </div>
                         </div>
 
                         <div className="mt-3 flex gap-2">
-                          <Button size="sm" onClick={() => handleCustomizeDay(day)}><Edit size={14} className="mr" /><span className="max-sm:hidden">Customize</span></Button>
-                          <Button size="sm" variant={isSkipped ? "destructive" : "outline"} onClick={() => handleSkipDay(day)}>
+                          <Button size="sm" onClick={() => handleCustomizeDay(info.day)}><Edit size={14} className="mr" /><span className="hidden">Customize</span></Button>
+                          <Button size="sm" variant={isSkipped ? "destructive" : "outline"} onClick={() => handleSkipDay(info.day)}>
                             {isSkipped ? "Unskip" : "Skip"}
                           </Button>
                         </div>
@@ -410,7 +438,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Sticky Bottom Action Bar */}
-      <div className="fixed left-0 right-0 bottom-0 md:bottom-6 flex justify-center pointer-events-none">
+      {/* <div className="fixed left-0 right-0 bottom-0 md:bottom-6 flex justify-center pointer-events-none">
         <div className="max-w-6xl w-full px-4 md:px-0 pointer-events-auto">
           <div className="bg-white rounded-xl shadow-lg p-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -432,7 +460,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }

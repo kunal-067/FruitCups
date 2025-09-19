@@ -22,6 +22,9 @@ export async function GET(req) {
     await connectDb();
     const searchParams = req.nextUrl.searchParams;
     const userId = searchParams.get("userId");
+
+    // await Membership.deleteMany({});
+
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json({
         success: false,
@@ -59,7 +62,8 @@ async function subscribe(req, user) {
       billing
     } = await req.json();
 
-    if (!planId || !billing || !plans.find(p => p.id == planId)) {
+    const selectedPlan = plans.find(p => p.id == planId)
+    if (!planId || !billing || !selectedPlan) {
       return NextResponse.json({
         message: "planId and duration are missing or invalid"
       }, {
@@ -87,9 +91,10 @@ async function subscribe(req, user) {
     const subscription = new Membership({
       user: user.userId,
       planId,
+      plan: selectedPlan.name,
       slot,
       billing,
-      schedule:defaultScheduledPlan,
+      schedule: defaultScheduledPlan,
       startDate: new Date,
       endDate: new Date(Date.now() + duration)
     });
@@ -112,3 +117,58 @@ async function subscribe(req, user) {
   }
 }
 export const POST = verifyToken(subscribe);
+
+async function verifySubscribe(res, user) {
+  try {
+    const {
+      membershipId,
+      upiId
+    } = await res.json();
+    if (upiId !== 'testdemo@upi') {
+      return NextResponse.json({
+        message: "Invalid payment",
+        data: null
+      }, {
+        status: 402
+      })
+    }
+
+    const subscription = await Membership.findById(membershipId);
+    if (!subscription) {
+      return NextResponse.json({
+        message: "Invalid subscription id",
+        data: null
+      }, {
+        status: 404
+      });
+    }
+
+    let duration;
+    if (subscription.billing === 'weekly') {
+      duration = 7 * 24 * 60 * 60 * 1000
+    } else if (subscription.billing === 'monthly') {
+      duration = 30 * 24 * 60 * 60 * 1000
+    } else if (subscription.billing === 'quarterly') {
+      duration = 4 * 30 * 24 * 60 * 60 * 1000
+    }
+
+    subscription.isActive = true;
+    subscription.startDate = new Date
+    subscription.endDate = new Date(Date.now() + duration)
+    await subscription.save();
+    return NextResponse.json({
+      message: 'Subscribed successfully',
+      data: subscription
+    })
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json({
+      message: "Internal server error",
+      error: error.message
+    }, {
+      status: 500
+    });
+  }
+
+}
+export const PATCH = verifyToken(verifySubscribe)

@@ -22,11 +22,11 @@ const membershipSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
-        unique: true, // one active membership per user
+        // unique: true, // one active membership per user
     },
     plan: {
         type: String,
-        enum: ["basic", "standard", "premium"],
+        enum: ["Basic", "Standard", "Premium"],
         required: true,
     },
     planId:{
@@ -54,7 +54,7 @@ const membershipSchema = new mongoose.Schema({
     },
     isActive: {
         type: Boolean,
-        default: true,
+        default: false,
     },
     status: {
         type: String,
