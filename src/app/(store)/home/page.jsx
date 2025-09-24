@@ -38,7 +38,7 @@ export default async function HomePage() {
 
     try {
         const [res, drinkRes] = await Promise.all([
-            fetch(`${baseUrl}${GET_PRODUCTS}?type=fruit`, { next: { revalidate: 36 } }),
+            fetch(`${baseUrl}${GET_PRODUCTS}?type=fruit`, { next: { revalidate: 3600 } }),
             fetch(`${baseUrl}${GET_PRODUCTS}?type=shake`, { next: { revalidate: 3600 } }),
         ]);
 
@@ -68,7 +68,7 @@ export default async function HomePage() {
             <Hero />
 
             {/* Popular Fruit Cups */}
-            <section id="menu" className="max-w-6xl mx-auto px-4 py-8">
+            <section id="menu" className="max-w-6xl mx-auto px-4">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-2xl font-semibold">Popular Fruit Cups</h3>
                     <Link href="/menu" className="text-sm text-emerald-600">View all</Link>
@@ -119,7 +119,7 @@ export default async function HomePage() {
                             <div className="text-2xl font-bold">Premium — ₹499 / month</div>
                             <div className="text-sm text-slate-500 mt-1">Save up to 20% and enjoy free delivery.</div>
                             <div className="mt-4">
-                                <button className="w-full bg-black py-2 font-medium text-white rounded-sm" >"Subscribe"</button>
+                                <Link href={'/membership'} className="w-full px-8 bg-black py-2 font-medium text-white rounded-sm" >"Subscribe"</Link>
                             </div>
                         </CardContent>
                     </Card>

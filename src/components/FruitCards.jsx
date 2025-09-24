@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { addItem } from "@/redux/slices/cartSlice"
 import { useEffect } from "react"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 // import { setFinalPrice } from "@/redux/slices/productSlice"
 
 const fallbackProd = {
@@ -21,6 +22,7 @@ const fallbackProd = {
 
 export function PopularCups({ p = fallbackProd }) {
     const dispatch = useDispatch();
+    const router = useRouter();
     
     function addToCart(item) {
         dispatch(addItem({ ...item, quantity: 1, size:{name:'Small', value:2.5} }))
@@ -31,14 +33,14 @@ export function PopularCups({ p = fallbackProd }) {
 
     return (
         <Card className="p-0 overflow-hidden max-sm:rounded-sm max-sm:shadow">
-            <div className="relative h-28 sm:h-36 flex items-center justify-center p-1">
+            <Link href={`/cups/${p._id}`} className="relative h-28 sm:h-36 flex items-center justify-center p-1">
                 <Image src={p?.images[0]?.url} alt={p.name} height={100} width={100} className="object-cover h-full w-auto" />
-            </div>
+            </Link>
             <CardContent className="p-3 max-sm:pt-0">
-                <div className="flex flex-wrap-reverse items-center justify-between">
+                <Link href={`/cups/${p._id}`} className="flex flex-wrap-reverse items-center justify-between">
                     <h4 className="font-medium text-sm">{p.name}</h4>
                     <Badge className='px-4'>{p?.nutrients[0]?.name}</Badge>
-                </div>
+                </Link>
                 <p className="text-emerald-600 font-semibold mt-2">₹{p.price} <span className="text-black text-[12px]"> / 250g</span></p>
                 <div className="mt-3 flex items-center gap-2">
                     <Button size="sm" className='hover:bg-gray-600 active:bg-gray-600' onClick={e => addToCart(p)} >
@@ -61,14 +63,14 @@ export function PopularDrinks({ d }) {
 
     return (
         <Card key={d._id} className="p-0 overflow-hidden">
-            <div className="relative h-36">
+            <Link href={`/cups/${d._id}`} className="relative h-36">
                 <Image src={d.images[0]?.url} alt={d.name} fill className="object-cover" />
-            </div>
+            </Link>
             <CardContent className="p-3 max-sm:pt-0">
-                <div className="flex flex-wrap-reverse items-center justify-between">
+                <Link href={`/cups/${d._id}`} className="flex flex-wrap-reverse items-center justify-between">
                     <h4 className="font-medium text-sm">{d.name}</h4>
                     <Badge className='px-4'>{d.tag}</Badge>
-                </div>
+                </Link>
                 <p className="text-emerald-600 font-semibold mt-2">₹{d.price}</p>
                 <div className="mt-3 flex gap-2">
                     <Button size="sm" onClick={e => addToCart(d)}>Add</Button>

@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { useDispatch, useSelector } from "react-redux"
 import { setNutrition, toggleFruits, toggleToppings } from "@/redux/slices/productSlice"
+import { toast } from "sonner"
+import Link from "next/link"
 
 
 const fruits = [
@@ -231,8 +233,8 @@ export function HomeScreenCustomizingCups() {
     // Sizes with multipliers
     const sizes = [
         { name: "Small", multiplier: 1 },
-        { name: "Medium", multiplier: 1.5 },
-        { name: "Large", multiplier: 2 },
+        { name: "Medium", multiplier: 2 },
+        { name: "Large", multiplier: 4 },
     ]
 
     // State
@@ -288,7 +290,7 @@ export function HomeScreenCustomizingCups() {
             img: customPreview,
         }
         console.log("Added to cart:", cartItem)
-        alert("Item added to cart!")
+        toast.success("Functionality coming soon!")
     }
 
     return (
@@ -386,9 +388,9 @@ export function HomeScreenCustomizingCups() {
                     }}>
                         Reset
                     </Button>
-                    <Button onClick={() => router.push('/customize')} className='sm:ml-12'>
+                    <Link href='/customize' className='sm:ml-12 flex justify-center items-center p-2 rounded-md bg-black text-white px-6 text-sm font-medium'>
                         Customize in detail
-                    </Button>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -7,11 +7,12 @@ import { Trash2, Plus, Minus } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart, incrementDecrement, removeItem } from "@/redux/slices/cartSlice";
 import { Badge } from "@/components/ui/badge";
-import { addAddresses, addCheckoutProducts } from "@/redux/slices/checkOutSlice";
+import { addAddresses, addCheckoutProducts, clearCheckout, clearCheckoutProducts } from "@/redux/slices/checkOutSlice";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { calculateFinalPrice } from "@/redux/selectors";
 import axios from "axios";
+import { Spinner } from "@/components/others/Spinner";
 
 export default function CartPage() {
     const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export default function CartPage() {
     const cart = useSelector(state => state.cart);
     const { addresses } = useSelector(state => state.checkout)
     const { isVerified } = useSelector(state => state.auth);
+    const [proceeding, setProceeding] = useState(false);
 
     const cartTotal = useMemo(() => {
         return cart.reduce((acc, curr) => acc += (curr.finalPrice || curr.price), 0)
@@ -32,6 +34,9 @@ export default function CartPage() {
         })
     }, [])
     function proceed() {
+        if(proceeding) return;
+        setProceeding(true)
+        dispatch(clearCheckoutProducts());
         cart.forEach(item => {
             const { _id, toppings, fruits, price } = item
             dispatch(addCheckoutProducts({ ...item, customizations: { toppings, fruits }, priceAtPurchase: price, productId: _id }))
@@ -45,6 +50,7 @@ export default function CartPage() {
         } else {
             router.push('/login')
         }
+        setProceeding(false)
     }
 
     return (
@@ -99,8 +105,8 @@ export default function CartPage() {
                                 </div>
 
                                 <CouponCard />
-                                <Button onClick={proceed} className="w-full bg-orange-600 active:bg-amber-500 text-white text-lg py-3 rounded-md hover:bg-orange-700 transition">
-                                    Proceed to Checkout
+                                <Button disabled={proceeding} onClick={proceed} className="w-full bg-orange-600 active:bg-amber-500 text-white text-lg py-3 rounded-md hover:bg-orange-700 transition">
+                                    {proceeding ? <Spinner/> : 'Proceed to Checkout'}
                                 </Button>
 
                                 {/* Extra: Membership CTA */}

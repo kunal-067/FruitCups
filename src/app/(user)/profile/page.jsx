@@ -33,6 +33,7 @@ import { Input } from "@/components/ui/input"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchUser } from "@/redux/slices/userSlice"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 // Zod schema for form validation
 const profileSchema = z.object({
@@ -135,37 +136,44 @@ export default function ProfilePage() {
                     <Separator />
 
                     <CardContent className="max-sm:pt-0 p-4 space-y-4">
-                        <Button
-                            variant="default"
-                            className="w-full justify-start gap-2"
-                            onClick={() => setActiveTab("dashboard")}
-                        >
-                            <Coins size={18} /> Dashboard
-                        </Button>
-                        <Button
-                        variant={"ghost"}
-                            className="w-full justify-start gap-2"
-                            onClick={() => router.push('/orders')}
-                        >
-                            <ShoppingBag size={18} /> My Orders
-                        </Button>
+                        <Link href="#" passHref>
+                            <Button
+                                variant="default"
+                                className="w-full justify-start gap-2 mt-2"
+                            >
+                                <Coins size={18} /> Dashboard
+                            </Button>
+                        </Link>
+
+                        <Link href="/orders" passHref>
+                            <Button
+                                variant="ghost"
+                                className="w-full justify-start gap-2 mt-2"
+                            >
+                                <ShoppingBag size={18} /> My Orders
+                            </Button>
+                        </Link>
+
+                        <Link href="#" passHref>
+                            <Button
+                                variant="ghost"
+                                className="w-full justify-start gap-2 mt-2"
+                            >
+                                <Heart size={18} /> Wishlist
+                            </Button>
+                        </Link>
+
+                        <Link href="/checkout/address" passHref>
+                            <Button
+                                variant="ghost"
+                                className="w-full justify-start gap-2 mt-2"
+                            >
+                                <MapPin size={18} /> Addresses
+                            </Button>
+                        </Link>
                         <Button
                             variant="ghost"
-                            className="w-full justify-start gap-2"
-                            // onClick={() => setActiveTab("wishlist")}
-                        >
-                            <Heart size={18} /> Wishlist
-                        </Button>
-                        <Button
-                            variant={"ghost"}
-                            className="w-full justify-start gap-2"
-                            // onClick={() => setActiveTab("addresses")}
-                        >
-                            <MapPin size={18} /> Addresses
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            className="w-full justify-start gap-2 text-red-600"
+                            className="w-full justify-start gap-2 mt-4 text-red-600"
                             onClick={handleLogout}
                         >
                             <LogOut size={18} /> Logout

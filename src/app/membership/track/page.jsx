@@ -23,16 +23,7 @@ import axios from "axios";
 import { defaultScheduledPlan } from "@/lib/planConfigs";
 
 // ---------- Demo/mock defaults ----------
-const DEFAULT_REFERRAL = "KF-REF-2025";
-const DEFAULT_WEEK = {
-  monday: { name: "Mango Cup", productId: "mango", img: "/products/prod-1.png" },
-  tuesday: { name: "Papaya Cup", productId: "papaya", img: "/fruits/papaya.png" },
-  wednesday: { name: "Banana Cup", productId: "banana", img: "/fruits/banana.png" },
-  thursday: { name: "Mixed Fruit Cup", productId: "mixed", img: "/fruits/mixed.png" },
-  friday: { name: "Apple Cup", productId: "apple", img: "/fruits/apple.png" },
-  saturday: { name: "Watermelon Cup", productId: "watermelon", img: "/fruits/watermelon.png" },
-  sunday: { name: "Seasonal Cup", productId: "seasonal", img: "/products/prod-seasonal.png" },
-};
+const DEFAULT_REFERRAL = "KF-REF-2025"
 
 const PLANS = {
   monthly: { price: 499, durationDays: 30, name: "Monthly" },

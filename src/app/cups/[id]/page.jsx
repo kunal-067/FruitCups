@@ -195,14 +195,14 @@ export default async function ProductDetail({ params }) {
       </div>
 
       {/* Desktop sticky summary */}
-      <div className="hidden md:flex items-center justify-between p-4 border-t border-gray-100 mt-4">
+      {/* <div className="hidden md:flex items-center justify-between p-4 border-t border-gray-100 mt-4">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-gray-50 rounded-md grid place-items-center overflow-hidden">
             <Image src={product.images[0].url} width={64} height={64} alt="small" className="w-full h-auto object-contain" />
           </div>
           <div>
             <div className="font-medium">{product.name}</div>
-            {/* <div className="text-sm text-slate-500">{selectedSize} • {selectedFruits.join(", ") || "Default"}</div> */}
+            <div className="text-sm text-slate-500">{selectedSize} • {selectedFruits.join(", ") || "Default"}</div>
           </div>
         </div>
 
@@ -210,7 +210,7 @@ export default async function ProductDetail({ params }) {
           <div className="text-lg font-semibold">₹{90909}</div>
           <CartOrBuy />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

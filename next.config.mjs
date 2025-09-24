@@ -16,7 +16,8 @@ const nextConfig = {
       'upload.wikimedia.org', // allow Wikimedia images
       'images.pexels.com',   // <-- add this
       'images.unsplash.com',  // optional if using Unsplash
-      'cdn.pixabay.com'       // optional if using Pixabay
+      'cdn.pixabay.com',       // optional if using Pixabay
+      'www.slhfreshfruits.sg'
     ],
   },
 }

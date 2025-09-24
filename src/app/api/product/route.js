@@ -34,6 +34,7 @@ export const GET = async (req) => {
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error fetching products:", error);
     return NextResponse.json(
       {
         message: "Error fetching products",

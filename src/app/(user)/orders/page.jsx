@@ -91,7 +91,7 @@ export default function OrdersPage() {
                                 <Button
                                     variant="outline"
                                     className="border-black text-black hover:bg-neutral-100"
-                                    onClick={() => router.push(`/orsers/${order._id}`)}
+                                    onClick={() => router.push(`/orders/${order._id}`)}
                                 >
                                     View Details
                                 </Button>

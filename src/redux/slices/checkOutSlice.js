@@ -63,6 +63,9 @@ const checkOutSlice = createSlice({
             });
         },
 
+        clearCheckoutProducts: (state) => {
+            state.products = [];
+        },
         clearCheckout: (state) => {
             state.products = [];
             state.usingAddress = null;
@@ -74,6 +77,7 @@ export const {
     addAddresses,
     addCheckoutProducts,
     setUsingAddress,
-    clearCheckout
+    clearCheckout,
+    clearCheckoutProducts
 } = checkOutSlice.actions;
 export default checkOutSlice.reducer;

@@ -1,11 +1,10 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Phone, MessageCircle } from 'lucide-react';
+import { Phone, MessageCircle, AlertCircle, PackageSearch } from 'lucide-react';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
 
@@ -19,25 +18,58 @@ const steps = ['Order Placed', 'Packed', 'Shipped', 'Out for Delivery', 'Deliver
 export default function OrderTrackingPage() {
   const params = useParams();
   const [order, setOrder] = useState(null);
-  const [state, setState] = useState({fetching:true, error:null})
+  const [state, setState] = useState({ fetching: true, error: null })
 
   useEffect(() => {
-    axios.get(`/api/orders/${params.id}`,{withCredentials:true}).then(res=>{
-        setOrder(res.data?.order);
-        setState({fetching:false, error:null});
-    }).catch(err=>{
+    axios.get(`/api/orders/${params.id}`, { withCredentials: true }).then(res => {
+      setOrder(res.data?.order);
+      setState({ fetching: false, error: null });
+    }).catch(err => {
       console.log(err)
-        setState({fetching:false, error:err.response.data})
+      setState({ fetching: false, error: err.response.data })
     })
   }, []);
 
-  if (state.fetching) return <OrderTrackingSkeleton/>
+  // const currentStepIndex = steps.indexOf(order.status);
+  // const progress = ((currentStepIndex + 1) / steps.length) * 100;
+  if (state.fetching) {
+    return <OrderTrackingSkeleton />
+  }
 
-  const currentStepIndex = steps.indexOf(order.status);
-  const progress = ((currentStepIndex + 1) / steps.length) * 100;
+  if (state.error) {
+    return (
+      <Card className="max-w-md mx-auto mt-8 border-red-200 shadow-md">
+        <CardHeader className="flex flex-col items-center">
+          <AlertCircle className="h-10 w-10 text-red-500 mb-2" />
+          <CardTitle className="text-red-600">Something went wrong</CardTitle>
+        </CardHeader>
+        <CardContent className="text-center space-y-3">
+          <p className="text-gray-600">
+            {state.error.message || "We couldn’t load your order details."}
+          </p>
+          <Button variant="destructive" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
 
+  if (!order) {
+    return (
+      <Card className="max-w-md mx-auto mt-8 shadow-md">
+        <CardHeader className="flex flex-col items-center">
+          <PackageSearch className="h-10 w-10 text-gray-400 mb-2" />
+          <CardTitle>No order found</CardTitle>
+        </CardHeader>
+        <CardContent className="text-center text-gray-600">
+          Please check your order ID and try again.
+        </CardContent>
+      </Card>
+    )
+  }
   return (
-     <div className="container max-w-6xl mx-auto p-4 lg:p-8 space-y-6 pb-16">
+    <div className="container max-w-6xl mx-auto p-4 lg:p-8 space-y-6 pb-16">
       {/* Order Summary */}
       <Card>
         <CardHeader>
@@ -75,7 +107,7 @@ export default function OrderTrackingPage() {
               </p>
               <p>{order.address.country}</p>
               <p className="mt-2 text-sm text-gray-500">
-                Expected by {new Date(order.deliveryWithin).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}
+                Expected by {new Date(order.deliveryWithin).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
               </p>
             </CardContent>
           </Card>
@@ -94,14 +126,12 @@ export default function OrderTrackingPage() {
                   return (
                     <li key={i} className="flex items-center gap-3">
                       <div
-                        className={`h-4 w-4 rounded-full ${
-                          isDone ? "bg-green-600" : "bg-gray-300"
-                        }`}
+                        className={`h-4 w-4 rounded-full ${isDone ? "bg-green-600" : "bg-gray-300"
+                          }`}
                       ></div>
                       <span
-                        className={`${
-                          isDone ? "text-green-700 font-medium" : "text-gray-500"
-                        }`}
+                        className={`${isDone ? "text-green-700 font-medium" : "text-gray-500"
+                          }`}
                       >
                         {step}
                       </span>
@@ -123,13 +153,13 @@ export default function OrderTrackingPage() {
             <CardContent className="flex items-center gap-4">
               <Image
                 src={order.deliveryBoy?.avatar || '/demo-b-profile.jpg'}
-                alt={order.deliveryBoy?.name||"demo-img"}
+                alt={order.deliveryBoy?.name || "demo-img"}
                 width={50}
                 height={50}
                 className="rounded-full"
               />
               <div className="flex-1">
-                <p className="font-semibold">{order.deliveryBoy?.name||'Demmo Partner'}</p>
+                <p className="font-semibold">{order.deliveryBoy?.name || 'Demmo Partner'}</p>
                 <p className="text-sm text-gray-500">{order.deliveryBoy?.phone || 9122874046}</p>
               </div>
               <div className="flex gap-2">

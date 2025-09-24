@@ -38,13 +38,13 @@ const NavBar = () => {
                     <Link href="/#contact" className={`hover:text-emerald-600 ${path == '/#contact' && 'text-emerald-600'}`}>Contact</Link>
                 </nav>
                 <div className="flex items-center gap-3">
-                    <button onClick={e => router.push('/profile')} className={`p-2 rounded-md hover:bg-gray-200 active:bg-gray-200 ${path == '/profile' && 'bg-gray-200'}`}><User className="h-5 w-5 text-slate-700" /></button>
-                    <button onClick={e => router.push('/cart')} className={`relative p-2 rounded-md hover:bg-gray-200 active:bg-gray-200 ${path == '/cart' && 'bg-gray-200'}`} aria-label="Cart">
+                    <Link href='/profile' className={`p-2 rounded-md hover:bg-gray-200 active:bg-gray-200 ${path == '/profile' && 'bg-gray-200'}`}><User className="h-5 w-5 text-slate-700" /></Link>
+                    <Link href='/cart' className={`relative p-2 rounded-md hover:bg-gray-200 active:bg-gray-200 ${path == '/cart' && 'bg-gray-200'}`} aria-label="Cart">
                         <ShoppingCart className="h-5 w-5" />
                         {cart.length > 0 && (
                             <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-xs w-5 h-5 rounded-full grid place-items-center">{cart.length}</span>
                         )}
-                    </button>
+                    </Link>
                 </div>
             </div>
         </header>
