@@ -6,10 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { GET_PRODUCTS } from "@/lib/ApiRoutes"
 import { PopularCups } from "@/components/FruitCards"
+import { useSearchParams } from "next/navigation"
 
-const baseUrl = process.env.BASE_URL || "http://localhost:3000"
-
-export default function MenuPage() {
+export default function MenuPage({}) {
+    const searchParams = useSearchParams();
     const [search, setSearch] = useState("")
     const [query, setQuery] = useState("") // query triggered by button
     const [cups, setCups] = useState([])
@@ -26,13 +26,13 @@ export default function MenuPage() {
         setLoading(true)
         setError(null)
         try {
-            const res = await fetch(`${baseUrl}${GET_PRODUCTS}?type=${type}&search=${query}`, {
+            const res = await fetch(`${GET_PRODUCTS}?type=${type}&search=${query}`, {
                 next: { revalidate: 3600 },
             })
             const data = await res.json()
             setData(data.products || [])
         } catch (err) {
-            console.error(err)
+            console.error(err, baseUrl, GET_PRODUCTS)
             setError("Failed to load products.")
         } finally {
             setLoading(false)
@@ -65,7 +65,7 @@ export default function MenuPage() {
             </div>
 
             {/* Tabs */}
-            <Tabs defaultValue="cups" className="w-full">
+            <Tabs defaultValue={searchParams.get('category')||'cups'} className="w-full">
                 <TabsList className="flex justify-center mb-6">
                     <TabsTrigger value="cups">Fruit Cups</TabsTrigger>
                     <TabsTrigger value="shakes">Shakes</TabsTrigger>

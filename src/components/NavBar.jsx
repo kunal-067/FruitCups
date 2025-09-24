@@ -31,7 +31,7 @@ const NavBar = () => {
 
                 <nav className="hidden md:flex items-center gap-6 text-sm">
                     <Link href="/" className={`hover:text-emerald-600 ${(path == '/' || path == '/home') && 'text-emerald-600'}`}>Home</Link>
-                    <Link href="#menu" className={`hover:text-emerald-600 ${path == '/#menu' && 'text-emerald-600'}`}>Menu</Link>
+                    <Link href="/menu" className={`hover:text-emerald-600 ${path == '/#menu' && 'text-emerald-600'}`}>Menu</Link>
                     <Link href="/customize" className={`hover:text-emerald-600 ${path == '/customize' && 'text-emerald-600'}`}>Customize Cup</Link>
                     <Link href="/membership" className={`hover:text-emerald-600 ${path == '/membership' && 'text-emerald-600'}`}>Membership</Link>
                     <Link href="/wallet" className={`hover:text-emerald-600 ${path == '/wallet' && 'text-emerald-600'}`}>Wallet/Coins</Link>

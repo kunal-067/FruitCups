@@ -29,7 +29,7 @@ let testimonials = [
 ]
 export default async function HomePage() {
     const referralCode = "KF-REF-2025";
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.BASE_URL;
     let isCupLoading = true; // for future use currently useless
     let isDrinkLoading = true; // for future use
 
@@ -71,7 +71,7 @@ export default async function HomePage() {
             <section id="menu" className="max-w-6xl mx-auto px-4">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-2xl font-semibold">Popular Fruit Cups</h3>
-                    <Link href="/menu" className="text-sm text-emerald-600">View all</Link>
+                    <Link href="/cups" className="text-sm text-emerald-600">View all</Link>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -164,7 +164,7 @@ export default async function HomePage() {
             <section className="max-w-6xl mx-auto px-4 py-8 bg-slate-50 rounded-t-xl">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-2xl font-semibold">Shakes & Juices</h3>
-                    <Link href="/drinks" className="text-sm text-emerald-600">View all</Link>
+                    <Link href="/menu?category=shake" className="text-sm text-emerald-600">View all</Link>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
