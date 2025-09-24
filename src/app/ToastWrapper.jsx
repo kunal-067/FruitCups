@@ -12,7 +12,7 @@ export default function Wrapper({ children }) {
   return (
     <>
       <ReduxProviders>{children}</ReduxProviders>
-      <Toaster />
+      <Toaster position="top-right" />
     </>
   );
 }

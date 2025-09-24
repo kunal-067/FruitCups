@@ -91,12 +91,12 @@ export default function CartPage() {
 
                         {/* Summary */}
                         <Card className="shadow-xl rounded-2xl">
-                            <CardContent className="space-y-4 max-sm:px-4">
-                                <h2 className="text-xl font-semibold text-green-900">
+                            <CardContent className="space-y-2 md:space-y-4 max-sm:px-4">
+                                <h2 className="text-lg md:text-xl font-semibold text-green-900">
                                     Order Summary
                                 </h2>
 
-                                <div className="space-y-1 text-gray-700">
+                                <div className="text-[14px] md:text-[16px] md:space-y-1 text-gray-700">
                                     <p>Subtotal: <span className="font-semibold">₹{cartTotal}</span></p>
                                     <p>Delivery Fee: <span className="font-semibold">₹20</span></p>
                                     <p className=" text-md font-bold">
