@@ -6,19 +6,19 @@ if (!MONGODB_URI) {
 }
 
 // Global cache for connection
-let cached = global.mongoose || {
+let cachedCon = global.mongoose || {
     conn: null
 };
 
 if (!global.mongoose) {
-    global.mongoose = cached;
+    global.mongoose = cachedCon;
 }
 
 export async function connectDb() {
     try {
-        // console.log(cached.conn, 'cached conn')
-        if (cached.conn) {
-            return cached.conn;
+        // console.log(cachedCon.conn, 'cachedCon conn')
+        if (cachedCon.conn) {
+            return cachedCon.conn;
         }
 
         const opts = {
@@ -29,9 +29,9 @@ export async function connectDb() {
             dbName: 'fruitcup',
         };
 
-        cached.conn = await mongoose.connect(MONGODB_URI, opts);
+        cachedCon.conn = await mongoose.connect(MONGODB_URI, opts);
         console.log('connected to db - ', MONGODB_URI)
-        return cached.conn;
+        return cachedCon.conn;
     } catch (err) {
         console.error('Error in connecting db', err)
     }
